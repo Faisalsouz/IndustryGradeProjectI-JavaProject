@@ -1,0 +1,16 @@
+---
+- name: Deploy application on Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Create Kubernetes resources
+      community.kubernetes.k8s:
+        state: present
+        definition: "{{ lookup('file', 'pod.yaml') }}"
+    - name: Create Kubernetes service
+      community.kubernetes.k8s:
+        state: present
+        definition: "{{ lookup('file', 'service.yaml') }}"
+    - name: Create Kubernetes deployment
+      community.kubernetes.k8s:
+        state: present
+        definition: "{{ lookup('file', 'deployment.yaml') }}"

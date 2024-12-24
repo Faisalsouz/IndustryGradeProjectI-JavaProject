@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: final-proj-pod
+spec:
+  containers:
+    - name: final-proj-cnt
+      image: faisalsouz/finalproj-tomcat:v1
+      ports:
+        - containerPort: 8080
