@@ -13,7 +13,7 @@
 
     - name: Build Docker image
       community.docker.docker_image:
-        path: ../Dockerfile
+        path: /root/final-proj/Dockerfile
         name: faisalsouz/finalproj-tomcat
         tag: v1
 
