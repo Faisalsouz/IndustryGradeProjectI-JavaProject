@@ -2,16 +2,25 @@
 - name: Build and run Docker container
   hosts: dev
   tasks:
+    - name: Copy application source code to Dev Server
+      ansible.builtin.copy:
+        src: /var/lib/jenkins/workspace/final-proj-deploy/ # Path on Jenkins Master
+        dest: /root/final-proj/ # Path on the Dev Server
+        remote_src: no
+        owner: root
+        group: root
+        mode: "0755"
+
     - name: Build Docker image
       community.docker.docker_image:
         path: ../Dockerfile
         name: faisalsouz/finalproj-tomcat
         tag: v1
 
-    # - name: Run Docker container
-    #   community.docker.docker_container:
-    #     name: faisalsouz/finalproj-tomcat
-    #     image: yfaisalsouz/finalproj-tomcat:v1
-    #     state: started
-    #     ports:
-    #       - "8090:8080"
+      # - name: Run Docker container
+      #   community.docker.docker_container:
+      #     name: faisalsouz/finalproj-tomcat
+      #     image: yfaisalsouz/finalproj-tomcat:v1
+      #     state: started
+      #     ports:
+      #       - "8090:8080"
