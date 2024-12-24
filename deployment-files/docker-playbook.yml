@@ -4,7 +4,7 @@
   tasks:
     - name: Copy application source code to Dev Server
       ansible.builtin.copy:
-        src: /var/lib/jenkins/workspace/final-proj-deploy/ # Path on Jenkins Master
+        src: /var/lib/jenkins/workspace/final-proj-deploy/Dockerfile # Path on Jenkins Master
         dest: /root/final-proj/ # Path on the Dev Server
         remote_src: no
         owner: root
