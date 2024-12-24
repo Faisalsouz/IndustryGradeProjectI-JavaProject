@@ -4,7 +4,7 @@
   tasks:
     - name: Build Docker image
       community.docker.docker_image:
-        path: Dockerfile
+        path: ../Dockerfile
         name: faisalsouz/finalproj-tomcat
         tag: v1
 
