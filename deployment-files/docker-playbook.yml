@@ -1,6 +1,6 @@
 ---
 - name: Build and run Docker container
-  hosts: docker-host
+  hosts: dev
   tasks:
     - name: Build Docker image
       community.docker.docker_image:
@@ -8,10 +8,10 @@
         name: faisalsouz/finalproj-tomcat
         tag: v1
 
-    - name: Run Docker container
-      community.docker.docker_container:
-        name: faisalsouz/finalproj-tomcat
-        image: yfaisalsouz/finalproj-tomcat:v1
-        state: started
-        ports:
-          - "8090:8080"
+    # - name: Run Docker container
+    #   community.docker.docker_container:
+    #     name: faisalsouz/finalproj-tomcat
+    #     image: yfaisalsouz/finalproj-tomcat:v1
+    #     state: started
+    #     ports:
+    #       - "8090:8080"
