@@ -14,8 +14,9 @@
 
     - name: Build Docker image
       community.docker.docker_image:
-        path: "{{ temp_dir.path }}"
-        name: faisalsouz/finalproj-tomcat
+        build:
+          path: "{{ temp_dir.path }}"
+        name: my-docker-image
         tag: latest
 
     - name: Clean up temporary files
