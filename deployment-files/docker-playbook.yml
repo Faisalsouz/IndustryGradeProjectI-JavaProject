@@ -1,65 +1,10 @@
-# ---
-# - name: Build Docker Image on Remote Server
-#   hosts: dev
-#   tasks:
-#     - name: Create a temporary directory for the repository
-#       ansible.builtin.tempfile:
-#         state: directory
-#       register: temp_dir
-
-#     - name: Pull GitHub repository
-#       git:
-#         repo: "https://github.com/Faisalsouz/IndustryGradeProjectI-JavaProject.git"
-#         dest: "{{ temp_dir.path }}"
-
-#     - name: Build Docker image
-#       community.docker.docker_image:
-#         build:
-#           path: "{{ temp_dir.path }}"
-#         name: my-docker-image
-#         tag: latest
-
-#     - name: Clean up temporary files
-#       file:
-#         path: "{{ temp_dir.path }}"
-#         state: absent
-
 ---
-- name: Build Docker Image on Remote Server
-  hosts: dev
+- name: Pull Docker Image on Remote Server
+  hosts: dev-server
   tasks:
-    - name: Remove conflicting container runtime
+    - name: Ensure Docker is installed
       apt:
-        name: containerd
-        state: absent
-      ignore_errors: yes
-
-    - name: Install required packages for Docker
-      apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-        state: present
-
-    - name: Add Docker GPG key
-      command: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-      args:
-        creates: /usr/share/keyrings/docker-archive-keyring.gpg
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
-        state: present
-
-    - name: Update APT cache
-      apt:
-        update_cache: yes
-
-    - name: Install Docker
-      apt:
-        name: docker-ce
+        name: docker.io
         state: present
 
     - name: Ensure Docker service is running
@@ -68,25 +13,8 @@
         state: started
         enabled: yes
 
-    - name: Create a temporary directory for the repository
-      ansible.builtin.tempfile:
-        state: directory
-      register: temp_dir
-
-    - name: Pull GitHub repository
-      git:
-        repo: "https://github.com/Faisalsouz/IndustryGradeProjectI-JavaProject.git"
-        dest: "{{ temp_dir.path }}"
-
-    - name: Build Docker image
+    - name: Pull Docker image from Docker Hub
       community.docker.docker_image:
-        build:
-          path: "{{ temp_dir.path }}"
-        source: build
+        name: faisalsouz/finalproj-tomcat
         tag: latest
-        name: my-tomcat-image
-
-    - name: Clean up temporary files
-      file:
-        path: "{{ temp_dir.path }}"
-        state: absent
+        source: pull
