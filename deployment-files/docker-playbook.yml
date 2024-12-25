@@ -25,7 +25,7 @@
 #         state: absent
 ---
 - name: Build Docker Image on Remote Server
-  hosts: dev-server
+  hosts: dev
   tasks:
     - name: Ensure Docker is installed
       apt:
