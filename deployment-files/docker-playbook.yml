@@ -1,48 +1,24 @@
-# ---
-# - name: Build and run Docker container
-#   hosts: dev
-#   tasks:
-#     - name: Copy application source code to Dev Server
-#       ansible.builtin.copy:
-#         src: /var/lib/jenkins/workspace/final-proj-deploy/Dockerfile # Path on Jenkins Master
-#         dest: /root/final-proj/ # Path on the Dev Server
-#         remote_src: no
-#         owner: root
-#         group: root
-#         mode: "0755"
-
-#     - name: Build Docker image
-#       community.docker.docker_image:
-#         path: /root/final-proj/
-#         name: faisalsouz/finalproj-tomcat
-#         tag: v1
-
-# - name: Run Docker container
-#   community.docker.docker_container:
-#     name: faisalsouz/finalproj-tomcat
-#     image: faisalsouz/finalproj-tomcat:v1
-#     state: started
-#     ports:
-#       - "8090:8080"
-
 ---
-- name: Create a temporary directory for the repository
-  ansible.builtin.tempfile:
-    state: directory
-  register: temp_dir
+- name: Build Docker Image on Remote Server
+  hosts: dev-server
+  tasks:
+    - name: Create a temporary directory for the repository
+      ansible.builtin.tempfile:
+        state: directory
+      register: temp_dir
 
-- name: Pull GitHub repository
-  git:
-    repo: "https://github.com/Faisalsouz/IndustryGradeProjectI-JavaProject.git"
-    dest: "{{ temp_dir.path }}"
+    - name: Pull GitHub repository
+      git:
+        repo: "https://github.com/Faisalsouz/IndustryGradeProjectI-JavaProject.git"
+        dest: "{{ temp_dir.path }}"
 
-- name: Build Docker image
-  community.docker.docker_image:
-    path: "{{ temp_dir.path }}"
-    name: faisalsouz/finalproj-tomcat
-    tag: latest
+    - name: Build Docker image
+      community.docker.docker_image:
+        path: "{{ temp_dir.path }}"
+        name: faisalsouz/finalproj-tomcat
+        tag: latest
 
-- name: Clean up temporary files
-  file:
-    path: "{{ temp_dir.path }}"
-    state: absent
+    - name: Clean up temporary files
+      file:
+        path: "{{ temp_dir.path }}"
+        state: absent
