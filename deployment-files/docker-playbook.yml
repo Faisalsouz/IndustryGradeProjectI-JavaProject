@@ -1,7 +1,43 @@
+# ---
+# - name: Build Docker Image on Remote Server
+#   hosts: dev
+#   tasks:
+#     - name: Create a temporary directory for the repository
+#       ansible.builtin.tempfile:
+#         state: directory
+#       register: temp_dir
+
+#     - name: Pull GitHub repository
+#       git:
+#         repo: "https://github.com/Faisalsouz/IndustryGradeProjectI-JavaProject.git"
+#         dest: "{{ temp_dir.path }}"
+
+#     - name: Build Docker image
+#       community.docker.docker_image:
+#         build:
+#           path: "{{ temp_dir.path }}"
+#         name: my-docker-image
+#         tag: latest
+
+#     - name: Clean up temporary files
+#       file:
+#         path: "{{ temp_dir.path }}"
+#         state: absent
 ---
 - name: Build Docker Image on Remote Server
-  hosts: dev
+  hosts: dev-server
   tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
     - name: Create a temporary directory for the repository
       ansible.builtin.tempfile:
         state: directory
@@ -16,8 +52,13 @@
       community.docker.docker_image:
         build:
           path: "{{ temp_dir.path }}"
-        name: my-docker-image
+        source: build
+        force: true
+        nocache: true
+        rm: true
+        pull: true
         tag: latest
+        name: my-docker-image
 
     - name: Clean up temporary files
       file:
