@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels: 
-        app:final-proj-pod
+        app: final-proj-pod
     spec:
       containers:
         - name: final-proj-cnt
