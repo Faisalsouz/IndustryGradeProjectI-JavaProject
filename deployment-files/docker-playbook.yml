@@ -23,13 +23,43 @@
 #       file:
 #         path: "{{ temp_dir.path }}"
 #         state: absent
+
 ---
 - name: Build Docker Image on Remote Server
   hosts: dev
   tasks:
-    - name: Ensure Docker is installed
+    - name: Remove conflicting container runtime
       apt:
-        name: docker.io
+        name: containerd
+        state: absent
+      ignore_errors: yes
+
+    - name: Install required packages for Docker
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      command: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+        state: present
+
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
         state: present
 
     - name: Ensure Docker service is running
@@ -53,12 +83,8 @@
         build:
           path: "{{ temp_dir.path }}"
         source: build
-        force: true
-        nocache: true
-        rm: true
-        pull: true
         tag: latest
-        name: my-docker-image
+        name: my-tomcat-image
 
     - name: Clean up temporary files
       file:
