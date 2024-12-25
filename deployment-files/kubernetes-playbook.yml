@@ -1,6 +1,6 @@
 ---
 - name: Deploy application on Kubernetes
-  hosts: localhost
+  hosts: dev
   tasks:
     - name: Create Kubernetes resources
       community.kubernetes.k8s:
