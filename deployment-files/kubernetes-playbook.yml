@@ -12,14 +12,14 @@
     - name: Create Kubernetes resources
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', '/root/final-proj/deployment-files/pod.yaml') }}"
+        definition: "{{ lookup('file', '/root/final-proj/deployment-files/pod.yml') }}"
 
     - name: Create Kubernetes service
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', '/root/final-proj/deployment-files/service.yaml') }}"
+        definition: "{{ lookup('file', '/root/final-proj/deployment-files/service.yml') }}"
 
     - name: Create Kubernetes deployment
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', '/root/final-proj/deployment-files/deployment.yaml') }}"
+        definition: "{{ lookup('file', '/root/final-proj/deployment-files/deployment.yml') }}"
