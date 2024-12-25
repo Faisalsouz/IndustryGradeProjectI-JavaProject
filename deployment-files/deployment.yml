@@ -9,7 +9,8 @@ spec:
       app: final-proj-pod
   template:
     metadata:
-      labels: app:final-proj-pod
+      labels: 
+        app:final-proj-pod
     spec:
       containers:
         - name: final-proj-cnt
